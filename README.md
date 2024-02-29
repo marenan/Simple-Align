@@ -1,4 +1,4 @@
-# Navigating Beyond Dropout: An Intriguing Solution towards Generalizable Image Super-Resolution
+# CVPR2024-Navigating Beyond Dropout: An Intriguing Solution towards Generalizable Image Super-Resolution
 
 ## Abstract
 
