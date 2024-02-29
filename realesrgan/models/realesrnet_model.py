@@ -240,12 +240,14 @@ class RealESRNetModel(SRModel):
 
 
 def reg(x, y):
-    mean_x = x.mean(0, keepdim=True)
-    mean_y = y.mean(0, keepdim=True)
-    cova_x = (x.t() @ x)
-    cova_y = (y.t() @ y)
+    mean_x = x.mean(1, keepdim=True)
+    mean_y = y.mean(1, keepdim=True)
+    cent_x = x - mean_x
+    cent_y = y - mean_y
+    cova_x = (cent_x.t() @ cent_x)
+    cova_y = (cent_y.t() @ cent_y)
 
-    mean_diff = (mean_x - mean_y).pow(2).mean()
+    mean_diff = (x - y).pow(2).mean()
     cova_diff = (cova_x - cova_y).pow(2).mean()
 
     return mean_diff + cova_diff
