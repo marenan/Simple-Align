@@ -218,6 +218,8 @@ class RealESRNetModel(SRModel):
             out = torch.nn.functional.adaptive_avg_pool2d(layer.out, 1)
             out = out.reshape(out.shape[0], out.shape[1], -1).permute(0, 2, 1)
             x1, x2 = torch.chunk(out, 2, 0)
+            x1 = x1 - x1.mean(0, keepdims=True)
+            x2 = x2 - x2.mean(0, keepdims=True)
             l_reg, n_reg = torch.tensor(0).to(out), torch.tensor(0).to(out)
             for u, v in zip(x1, x2):
                 out_ = torch.cat([u, v])
@@ -240,12 +242,8 @@ class RealESRNetModel(SRModel):
 
 
 def reg(x, y):
-    mean_x = x.mean(1, keepdim=True)
-    mean_y = y.mean(1, keepdim=True)
-    cent_x = x - mean_x
-    cent_y = y - mean_y
-    cova_x = (cent_x.t() @ cent_x)
-    cova_y = (cent_y.t() @ cent_y)
+    cova_x = (x.t() @ x)
+    cova_y = (y.t() @ y)
 
     mean_diff = (x - y).pow(2).mean()
     cova_diff = (cova_x - cova_y).pow(2).mean()
