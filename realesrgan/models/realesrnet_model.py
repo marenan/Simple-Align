@@ -215,7 +215,7 @@ class RealESRNetModel(SRModel):
                 l_total += l_style
                 loss_dict['l_style'] = l_style
         if 'reg' in self.name:
-            out = torch.nn.functional.adaptive_avg_pool2d(layer.out, 1)
+            out = torch.nn.functional.adaptive_avg_pool2d(self.net_g.out, 1)
             out = out.reshape(out.shape[0], out.shape[1], -1).permute(0, 2, 1)
             x1, x2 = torch.chunk(out, 2, 0)
             x1 = x1 - x1.mean(0, keepdims=True)
